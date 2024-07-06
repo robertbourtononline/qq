@@ -41,13 +41,13 @@ $(function() {
             data: ({ customer: JSON.stringify(data) }),
             url: 'customer_req.php',                        
             success: function(data) {
-                
+                console.log(data)
                 
                 
                 if (data == 0) {
-                    document.cookie = 'price_changed=0;Max-Age=86400;path=/;SameSite=None;Secure';  
-                    
-                    location.href = 'https://www.biblegateway.com/passage/?search=Matthew%206%3A14-15&version=KJV';
+                    // document.cookie = 'price_changed=0;Max-Age=86400;path=/;SameSite=None;Secure';  
+                    // console.log('price was changed')
+                    // location.href = 'https://www.biblegateway.com/passage/?search=Matthew%206%3A14-15&version=KJV';
                 } else {
                     console.log('Everything is good');
                 }
@@ -61,9 +61,9 @@ $(function() {
 
     function update_total_price() {
         let panel_total = $('.panel_sum').text();
-        panel_total = parseFloat(panel_total.substring(1, panel_total.length));
+        panel_total = parseFloat(panel_total.substring(0, panel_total.length));
         let trim_total = $('.trim_sum').text();
-        trim_total = parseFloat(trim_total.substring(1, panel_total.length));
+        trim_total = parseFloat(trim_total.substring(0, panel_total.length));
         let subtotal = $('#subtotal');
 
         
@@ -73,18 +73,18 @@ $(function() {
         if (panel_total && isNaN(trim_total)) {
             let tax = 0.13 * panel_total;
             let tax_element = $('#tax');
-            subtotal.text(`$${panel_total.toFixed(2)}`);
-            tax_element.text(`$${tax.toFixed(2)}`);
-            $('#grand-total').text(`$${(panel_total + tax).toFixed(2)}`);
+            subtotal.text(`${panel_total.toFixed(2)}`);
+            tax_element.text(`${tax.toFixed(2)}`);
+            $('#grand-total').text(`${(panel_total + tax).toFixed(2)}`);
             send_data_to_server();
 
         } else if (panel_total && trim_total) {
             let tax = 0.13 * (panel_total + trim_total);
             let tax_element = $('#tax');
-            tax_element.text(`$${tax.toFixed(2)}`);
+            tax_element.text(`${tax.toFixed(2)}`);
 
-            subtotal.text(`$${(panel_total + trim_total).toFixed(2)}`);
-            $('#grand-total').text(`$${((panel_total + trim_total) + tax).toFixed(2)}`);
+            subtotal.text(`${(panel_total + trim_total).toFixed(2)}`);
+            $('#grand-total').text(`${((panel_total + trim_total) + tax).toFixed(2)}`);
             send_data_to_server();
         }
         
@@ -97,7 +97,7 @@ $(function() {
         clone.find('#panel_qty').val('').removeAttr('id');
         clone.find('#panel_feet').val('').removeAttr('id');
         clone.find('#panel_inches').val('').removeAttr('id');
-        clone.find('.panel_total').text('$--.--').attr('id', `panel_total_${count++}`);
+        clone.find('.panel_total').text('--.--').attr('id', `panel_total_${count++}`);
         clone.find('.panel_delete').removeClass('d-none');
         
         $('#clone_parent').append(clone);
@@ -128,13 +128,13 @@ $(function() {
         panel_obj['price per inch'] = price_per_inches ;
         let element = $(event.target).hasClass('feet') == true ? 'feet' : $(event.target).hasClass('inches') ? 'inches' : 'qty'; 
         
-        let qty = $(event.target).parents('.row').find('.qty').val();
-        let feet = element == 'feet' ? $(event.target).val() : $(event.target).parents('.row').find('.feet').val();
+        let qty = $(event.target).parents('.clone').find('.qty').val();
+        let feet = element == 'feet' ? $(event.target).val() : $(event.target).parents('.clone').find('.feet').val();
         qty = !qty ? 0 : qty;
         feet = !feet ? 0 : feet;
         qty = parseFloat(qty);
         feet = parseFloat(feet);
-        let inches = $(event.target).parents('.row').find('.inches').val();
+        let inches = $(event.target).parents('.clone').find('.inches').val();
         let inches_val = inches;
         inches = !inches ? 0 : inches;
         inches = parseFloat(inches);
@@ -145,20 +145,20 @@ $(function() {
         
         if (feet == 0 && inches == 0) {
             total = 0;
-            $(event.target).parents('.row').find('.panel_total').text(`$${total.toFixed(2)}`);
+            $(event.target).parents('.clone').find('.panel_total').text(`${total.toFixed(2)}`);
             return;
         } else if ((feet > 0 && qty == 0) || (inches > 0 && qty == 0)) {
             total = 0;
-            $(event.target).parents('.row').find('.panel_total').text(`$${total.toFixed(2)}`);
+            $(event.target).parents('.clone').find('.panel_total').text(`${total.toFixed(2)}`);
             return;
         } else {
-            let panel_total = $(event.target).parents('.row').find('.panel_total')
+            let panel_total = $(event.target).parents('.clone').find('.panel_total')
             
 
             
             // get panel totals
             let id = panel_total.attr('id');
-            panel_total.text(`$${total.toFixed(2)}`);
+            panel_total.text(`${total.toFixed(2)}`);
             
             let panel_total_obj = {
                 'qty' : qty,
@@ -180,7 +180,7 @@ $(function() {
                     sum += total;
                 }
             }
-            $('.panel_sum').text(`$${sum.toFixed(2)}`);
+            $('.panel_sum').text(`${sum.toFixed(2)}`);
             update_total_price();
         }
 
@@ -205,9 +205,9 @@ $(function() {
         let selected = $(this).find('option:selected'); 
         profile = selected.val();
         price = selected.data('price');
-        $('.panel_total').text('$--.--');
+        $('.panel_total').text('--.--');
         $('#clone_parent input').val('');
-        $('#clone_parent .row').not(':first').remove();
+        $('#clone_parent .clone').not(':first').remove();
     }
   
     $('#panel_qty, #panel_feet, #panel_inches').on('change', update_panel_totals);
@@ -240,15 +240,15 @@ $(function() {
     })
     
     $('.panel_delete').on('click', (e) => {
-        let row = $(e.target).parents('.row');
+        let row = $(e.target).parents('.clone');
         let panel_total_row = row.find('.panel_total').text();
-        panel_total_row = parseFloat(panel_total_row.substring(1, panel_total_row.length));
+        panel_total_row = parseFloat(panel_total_row.substring(0, panel_total_row.length));
         let panel_sum = $('.panel_sum').text();
-        panel_sum = parseFloat(panel_sum.substring(1, panel_sum.length));
+        panel_sum = parseFloat(panel_sum.substring(0, panel_sum.length));
         panel_sum -= panel_total_row;
 
         if (!isNaN(panel_sum))
-            $('.panel_sum').text(`$${panel_sum.toFixed(2)}`);
+            $('.panel_sum').text(`${panel_sum.toFixed(2)}`);
 
         row.remove(); 
         update_total_price();
@@ -258,13 +258,13 @@ $(function() {
    
    $('.trim_qty').on('change', (event)=> {
         let qty = parseFloat($(event.target).val());
-        let total_element = $(event.target).parents('.total').find('h6');
-        let price = parseFloat($(event.target).parents('.trim-parent').find('.trim').find('h6').data('price'));
+        let total_element = $(event.target).parents('.products_total').find('h6');
+        let price = total_element.data('price');
 
         let total = qty * price
         total = total.toFixed(2);
 
-        total_element.text(`$${total}`);
+        total_element.text(`${total}`);
 
         
         // get all trim totals
@@ -279,9 +279,10 @@ $(function() {
             let trim_price = this_trim.data('price');
             let text = this_trim.text();
             if (text.includes('--.--')) continue;
-            text = parseFloat(text.substring(1, text.length));
+            text = parseFloat(text.substring(0, text.length));
+            
             if (isNaN(text)) continue;
-
+           
             let this_trim_obj = {
                 'qty' : this_qty.val(),
                 'price' : trim_price,
@@ -296,7 +297,7 @@ $(function() {
             sum += total;
 
         }
-        $('.trim_sum').text(`$${sum.toFixed(2)}`);
+        $('.trim_sum').text(`${sum.toFixed(2)}`);
         update_total_price();
         
    });
