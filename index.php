@@ -9,8 +9,8 @@ include_once "FileUtility.php";
 require_once "email/EmailApp.php";
 
 if (isset($_COOKIE['price_changed'])) {
-   header("Location: https://www.biblegateway.com/passage/?search=Matthew%206%3A14-15&version=KJV");
-   exit;
+   // header("Location: https://www.biblegateway.com/passage/?search=Matthew%206%3A14-15&version=KJV");
+   // exit;
 } 
 
 
@@ -81,7 +81,10 @@ $accessories = $util->csv_to_array_array($accessories_fileName, 2);
 ?>
 
 
-   
+<div id="image">
+    <img src="assets/img/logo.png" alt="..." />
+</div>
+
 	
 <h1 id="app_title">Quick Quote</h1>
 
@@ -133,20 +136,20 @@ $accessories = $util->csv_to_array_array($accessories_fileName, 2);
    <h6>Panel Total: <span class='panel_sum'></span></h6>
    
    <div id='clone_parent'>
-      <div id='clone_section'>
+      <div id='clone_section' class='clone'>
          <div>
             <label for="qty">Qty</label>
-            <input type="text" id="panel_qty">
+            <input class='qty' type="text" id="panel_qty">
          </div>
          
          <div>
             <label for="feet">Feet</label>
-            <input type="text" id="panel_feet">	
+            <input class='feet' type="text" id="panel_feet">	
          </div>
          
          <div>
             <label for="inches">Inches</label>
-            <input type="text" id='panel_inches'>	
+            <input class='inches' type="text" id='panel_inches'>	
          </div>
 
          <div>
@@ -156,46 +159,46 @@ $accessories = $util->csv_to_array_array($accessories_fileName, 2);
             </div>
          </div>
          
-         <div>
-            <div class='req'>Qty and Feet field are required</div>
+         <div class='req'>
+            <div>Qty and Feet field are required</div>
          </div>
          
       </div>
    </div>
 </section>
+<hr>
+<section class='products'>
+   <h3 class='product_title'>Trim</h3>
+   
+   <div>
+      <h6>Trim Total: <span class='trim_sum'></span></h6>
+      <a href='#' id='trim_button'>Hide Trim Section</a>
+   </div>
+   <div class="container_products">
+      <?php foreach ($trim_list as $name => $price ) { 
+         $name_strip = str_replace(' ', '', strtolower($name));
+         ?>
+         
+            <div class='sub_container_products'>
+               <div>
+                  <h6><?= $name ?></h6>
+                  <img src= <?= $path_to_trim_images . $name_strip . ".jpg" ?>>
+               </div>
 
-   <section>
-      <h3 class='product_title'>Trim</h3>
-      
-      <div>
-         <h6>Trim Total: <span class='trim_sum'></span></h6>
-         <a href='#' id='trim_button'>Hide Trim Section</a>
-      </div>
-      <div class="container_products">
-         <?php foreach ($trim_list as $name => $price ) { 
-            $name_strip = str_replace(' ', '', strtolower($name));
-            ?>
-            
-               <div class='sub_container_products'>
+               <div class='products_total'>
+                  <label for="qty">Qty</label>
+                  <input type="text" class="trim_qty"  placeholder="qty">	
                   <div>
-                     <h6 data-price=<?= $price[0] ?> data-name=<?= "'" . $name ."'" ?>  id=<?= $name_strip  ?>><?= $name ?> </h6>
-                     <img src= <?= $path_to_trim_images . $name_strip . ".jpg" ?> class=''>
-                  </div>
-
-                  <div class='products_total'>
-                     <label for="qty">Qty</label>
-                     <input type="text" class=""  placeholder="qty">	
-                     <div>
-                        <h6 data-price=<?= $price[0] ?> data-name=<?= "'" . $name ."'" ?> class='trim_total_amount dollar'></h6>
-                     </div>
+                     <h6 data-price=<?= $price[0] ?> data-name=<?= "'" . $name ."'" ?> class='trim_total_amount dollar'></h6>
                   </div>
                </div>
-         <?php } ?>
-      </div>
-   </section>
+            </div>
+      <?php } ?>
+   </div>
+</section>
 
-
-   <section>
+   <hr>
+   <section class='products'>
       <h3 class='product_title'>Accessories</h3>
       <div>
          <h6>Accessories Total: <span class='accessories_sum'></span></h6>
@@ -228,7 +231,7 @@ $accessories = $util->csv_to_array_array($accessories_fileName, 2);
 
 
 
-
+<hr>
 
 
 
@@ -241,52 +244,52 @@ $accessories = $util->csv_to_array_array($accessories_fileName, 2);
 
 
 		
-		<div class='col-12 pt-5'>
-			<div class='col-md-3 col-xs-12'>
+		<section>
+			<div>
 				<p><a href='#customer_info'>Send Us Your Custom Trim</a></p>
 			</div>
-			
-		</div>
-		<div class='img_enlarge justify-content-center d-none flex-column align-items-center'>
-			<img src="" alt="Enlarged Image">
-			<span></span>
-		</div>
-	</div>
+		   
+         <div class='img_enlarge'>
+            <img src="" alt="Enlarged Image">
+            <span></span>
+         </div>
+      </section>
+	
 	
 
-	<table class="table table-hover table-striped w-md-50 mt-5">
+	<table class="">
   <tbody>
     <tr>
-      <th scope="row">Profile</th>
+      <th>Profile</th>
       <td id='profile_selected'>Tuff Rib</td>
     </tr>
     <tr>
-      <th scope="row">Color</th>
+      <th>Color</th>
       <td id='color_selected'>Stone Grey</td>
     </tr>
 	<tr>
-      <th scope="row">Panel Total</th>
+      <th>Panel Total</th>
       <td class='panel_sum'></td>
     </tr>
 
 	<tr>
-      <th scope="row">Trim Total</th>
+      <th>Trim Total</th>
       <td class='trim_sum'></td>
      
      
     </tr>
-	<tr class='p-5'>
-      <th scope="row">Sub Total</th>
+	<tr>
+      <th>Sub Total</th>
       <td id='subtotal'></td>
      
      
     </tr>
-    <tr class='p-5 m-5 border-bottom border-dark'>
-      <th scope="row">Tax</th>
+    <tr>
+      <th>Tax</th>
       <td id='tax'></td>
     </tr>
-	<tr class='p-5 m-5 border-top border-dark'>
-      <th scope="row">Total</th>
+	<tr>
+      <th>Total</th>
       <td id='grand-total'></td>
     </tr>
   </tbody>

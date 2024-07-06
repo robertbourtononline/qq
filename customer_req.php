@@ -59,7 +59,7 @@ $trim_val = function ($trim) use($trim_list) {
         $total = (float)$trim_total_array[$i];
         $server_price = (float)$trim_list[$name][0];
 
-        if (!($total == $server_price) && !(($server_price * $qty) == $total)) {
+        if (($total != $server_price) && (($server_price * $qty) != $total)) {
             return 0;
         }
    }
@@ -83,9 +83,10 @@ if (isset($_POST['customer'])) {
     $comfirm_trim = $trim_val($trim);
     
    if ($comfirm_panels == 0 || $comfirm_trim == 0) {
-        setcookie("price_changed", 1, time()+3600);
-        echo json_encode(0);    
+        // setcookie("price_changed", 1, time()+3600);
+        // echo json_encode(0);
+        echo json_encode($comfirm_trim);    
    } else {
-        echo json_encode(1);
+        echo json_encode($comfirm_trim);
    }
  }
