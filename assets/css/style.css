@@ -1,0 +1,139 @@
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.req {
+    display: none;
+}
+
+#app_title {
+    text-align: center;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+#app_title::after {
+    content: ' - The Guenther Way';
+    display: block;
+    font-size: .9rem;
+    font-weight: 900;
+    margin-left: 2.5rem;
+    text-transform: lowercase;
+}
+
+section:not(:first-of-type):not(#pick_color) {
+    margin: 2.1rem 0;
+}
+section {
+    margin: 0 .7rem;
+}
+#profile_section label, #pick_color label {
+    font-size: 0.8rem;
+}
+
+#color_page {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-right: .4rem;
+}
+
+section h3 {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+section h6:first-of-type {
+    margin-bottom: 2rem;
+}
+
+section a {
+    font-size: .5rem;
+}
+
+section#profile_section {
+    display: grid;
+    grid-template-columns:  repeat(auto-fit, minmax(3rem, 1fr));
+    grid-template-rows: 1fr;
+}
+
+#profile_img_section div {
+    margin: 0 1rem 1.4rem 2rem;
+    text-align: center;
+    font-size: .7rem;
+
+}
+
+section#pick_color {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
+    grid-template-rows: 1fr;
+   
+}
+#clone_section {
+    display: flex;
+    
+    
+}
+#clone_section div {
+    margin: 0 .4rem 0 .2rem;
+    
+}
+
+#clone_section input {
+    width: 3rem;
+}
+
+.product_title + div {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 .5rem;
+}
+
+
+
+.container_products {
+    width: 90vw;
+    margin: 0 auto;   
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    grid-template-rows: auto;
+    gap: 1rem;
+}
+.sub_container_products {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sub_container_products h6 {
+    text-align: center;
+    font-size: 0.92rem;
+}
+.sub_container_products h6:first-of-type {
+    font-size: .7rem;
+}
+
+.container_products img {
+
+    width: 100%;
+   
+   
+}
+
+.products_total h6 {
+    text-align: center;
+}
+
+.dollar::before {
+    content: '$';
+    display: inline;
+    padding-right: .4rem;
+}
